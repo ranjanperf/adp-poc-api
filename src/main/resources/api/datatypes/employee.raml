@@ -1,0 +1,21 @@
+#%RAML 1.0 DataType
+displayName: Employee
+description: This is the datatype for Employeet.
+type: object
+properties:
+  employee:
+    type: object
+    required: true
+    properties:
+      id:
+        type: string
+        required: true
+        example: "A001"
+      first_name:
+        type: string
+        required: true
+        example: "Jack"
+      last_name:
+        type: string
+        required: true
+        example: "Ryan"

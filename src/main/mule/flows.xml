@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="create_employee" doc:id="712d3664-a5ed-49ff-bf2d-798b1e0e1a49" >
+		<ee:transform doc:name="Transform Message" doc:id="093574b4-18c2-48cc-bd6d-42e757aacecc" >
+			<ee:message >
+				<ee:set-payload resource="creat_employee_response.dwl" />
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+201]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="get_input_1" doc:id="40c29958-2d2f-41c1-8f7c-63d401919a5b" >
+		<ee:transform doc:name="Transform Message" doc:id="4188ef69-7d9d-482b-bdae-68d49c7359f5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{"employee":[{"id":"A007","first_name":"Jan","last_name":"Doe"},{"id":"A008","first_name":"Ron","last_name":"David"},{"id":"A009","first_name":"Jane","last_name":"Kane"},{"id":"A010","first_name":"Marsh","last_name":"Megan"},{"id":"A011","first_name":"Kelly","last_name":"Mitch"},{"id":"A012","first_name":"Chris","last_name":"Vaste"}]}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+		<sub-flow name="get_input_2" doc:id="823ce29a-fb58-406a-836f-c806595502b7" >
+		<ee:transform doc:name="Transform Message" doc:id="4433c1d8-d673-496f-9b17-75d4521e26bf" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{"scoreBoard":[{"id":"A007","subjects":["Maths","English","Arts","Drawimgs"],"score":[80,75,89,100]},{"id":"A008","subjects":["Maths","English","Arts","Drawimgs"],"score":[70,85,69,90]},{"id":"A021","subjects":["Maths","English","Arts","Drawimgs"],"score":[90,87,77,95]}]}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+	<flow name="get_list" doc:id="c3ebcf07-f6fd-448c-ae15-2bd5c0e464ad" >
+		<ee:transform doc:name="Transform Message" doc:id="55a6db51-0c1b-4855-abd7-ce9f2581fe93">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="count"><![CDATA[%dw 2.0
+output application/java
+---
+(vars.count default 0) + 1 ]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<choice doc:name="Choice" doc:id="e868f230-7948-41a6-85f0-f0d596facfde">
+			<when expression="#[vars.count &lt;= vars.input_number]">
+				<ee:transform doc:name="Transform Message" doc:id="ea8813e9-22d1-42ab-b244-224de1391807">
+					<ee:message>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="returnList" ><![CDATA[%dw 2.0
+output application/java
+---
+vars.returnList default [] ++ [vars.count]
+]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="get_list" doc:id="84ff525b-58db-4094-af69-be4d4c328bed" name="get_list" />
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Transform Message" doc:id="e2837e7e-f5fa-4c61-b24c-b8703baf1134">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+vars.returnList default []]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

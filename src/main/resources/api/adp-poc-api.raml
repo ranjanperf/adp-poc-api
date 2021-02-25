@@ -1,0 +1,56 @@
+#%RAML 1.0
+title: ADP POC API
+version: v1
+
+/employee:
+  post:
+    description: Adp Employee Creation Poc
+    body:
+      application/json:
+        type: !include datatypes/employee.raml
+        example: !include examples/employee.json
+    responses:
+      201:
+        body:
+          application/text:
+            type: string
+            example: "Jack Ryan was created successfully. (Employee ID : A001)"
+
+/camelCase:
+  post:
+    description: Adp Employee Creation Poc
+    body:
+     text/plain:
+        example: "this is input string"
+    responses:
+      200:
+        body:
+          text/plain:
+            type: string
+            example: "ThisIsInputString"
+  
+/join1:
+  get:
+    description: Join API for poc 4.1
+    
+/join2:
+  get:
+    description: Join API for poc 4.2
+    
+    
+/list/{input_number}:
+  uriParameters:
+    input_number:
+      description: The id of the user
+      type: integer
+  get:
+    description: API to return list of N nautural numbers based on  provided input number 
+    responses:
+      200:
+        body:
+          application/json:
+            type: array
+            items: integer
+            example: [1,2,3]
+                 
+   
